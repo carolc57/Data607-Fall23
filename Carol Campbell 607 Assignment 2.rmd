@@ -1,0 +1,182 @@
+---
+title: "Assignment 2: Sql and R"
+author: "Carol Campbell"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+I chose six movies now playing, and asked ten "friends" to rate each of the movies they had seen on a scale of 1 to 5. Not everyone saw every movie.
+
+Using MySQL workbench, I created the "movies" database which has three individual tables to store data:
+
+Table 1: movie
+Table 2: reviewer
+Table 3: rating
+
+Install needed packages and/or libraries.
+```{r include=FALSE}
+#install.packages("RMySQL")
+#install.packages("DBI")
+
+library(RMySQL)
+library(DBI)
+library(dbplyr)
+library(tidyverse)
+library(ggplot2)
+
+```
+
+
+I created a new MySQL database connection, "Data607", which I will be using throughout this course. The password is "Fall2023!"
+(Reference - Youtube video, "MySQL Workbench Add User and Connect to Database", https://www.youtube.com/watch?v=P7whjxMqYU4)
+
+```{r}
+# Connect MySQL to R to upload my "movies" database. Use "Fall2023!" for password.
+
+mydb = dbConnect(RMySQL::MySQL(),
+       dbname='movies',
+       host='127.0.0.1',
+       port=3306,
+       user='Data607',
+       password=rstudioapi::askForPassword("Enter password"))
+```
+
+What tables are in the "movies" database?
+```{r}
+# See the database tables.
+
+dbListTables(mydb)
+```
+
+Show each table:
+```{r}
+
+#movie table
+movie_tbl <- dbSendQuery(mydb, "SELECT * FROM movie")
+dbFetch(movie_tbl)
+
+#reviewer table
+reviewer_tbl <- dbSendQuery(mydb, "SELECT * FROM reviewer")
+dbFetch(reviewer_tbl)
+
+#score table
+score_tbl <- dbSendQuery(mydb, "SELECT * FROM score")
+dbFetch(score_tbl)
+
+```
+
+
+Join the three tables movie, reviewer, rating to make one table called "movie_ratings", which I loaded into a data frame.
+```{r}
+
+movie_ratings <- dbSendQuery(mydb, "SELECT 
+	m.title As 'Title',
+	m.genre As 'Genre',
+	r.first_name AS 'Reviewer',
+	s.rating As 'Rating'
+FROM movie m
+JOIN reviewer r 
+ON m.movie_id = r.movie_id
+JOIN score s
+ON r.first_name = s.reviewer
+AND r.movie_id = s.movie_id");
+
+#dbFetch(movie_ratings) and create data frame
+movie_ratings<-fetch(movie_ratings)  
+print(movie_ratings)
+```
+
+
+```{r}
+# Checked the structure of the data. 50 rows. 4columns. 
+
+str(movie_ratings)
+```
+
+Tidy the data
+Since every reviewer did not see every movie, we have to exclude the blank fields from any calculations. We do this my filtering them out by using "!is.na" function. 
+```{r}
+# Group by title to see the average score for each movie rated; use is.na to exclude blank fields. 
+
+new_ratings <- movie_ratings %>%
+  filter(!is.na(Rating)) %>%
+   group_by(Title) %>%
+    summarise(Avg_Score = mean(as.numeric(Rating))) %>%
+      arrange(desc(Avg_Score)
+      )
+
+new_ratings
+```
+
+#See average rating per reviewer
+```{r}
+reviewer_ratings <- movie_ratings %>%
+  group_by(Reviewer)%>%
+    summarise (Avg_rating = mean(Rating, na.rm=TRUE)
+  ) 
+
+reviewer_ratings 
+
+
+```
+
+# ggplot of the Average Score for each movie 
+```{r}
+new_ratings %>%
+ggplot +
+  coord_flip() +
+  geom_col(aes(Avg_Score, Title)
+   )
+```
+Graphically, "The Nun II" has the lowest  rating; "Dumb Money and Expend4bles" are equally tied at a rating of 4 each. 
+
+#Lets see how the reviewer ratings for each movie
+```{r}
+reviewer_ratings %>%
+ggplot +
+  geom_col(aes(Reviewer, Avg_rating)
+   )
+```
+
+At first glance, we can easily conclude that Beverly "grades" movies more harshly than others with an on-average rating of approximately 2.4, which would be true if everyone saw/reviewed every movie, but such is not the case. Some reviewed two movies while others reviewed as many as four, in essence skewing the results.  More data exploration is necessary, but I am unsure how to illustrate this graphically. 
+
+
+```{r}
+# Lets look at the count for each rating per movie. 
+options(dplyr.summarise.inform = FALSE)  #silences warning message
+
+count_reviewed <- movie_ratings 
+count_reviewed %>% group_by(Title, Rating) %>% summarise(count = n())%>%
+arrange(desc(Title))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
