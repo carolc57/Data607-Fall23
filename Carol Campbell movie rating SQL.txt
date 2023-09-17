@@ -1,0 +1,200 @@
+CREATE DATABASE movies;
+
+USE movies;  /*sets default database*/
+
+DROP TABLE IF EXISTS movie;
+DROP TABLE IF EXISTS reviewer;
+DROP TABLE IF EXISTS rating;
+
+/*create the tables*/
+CREATE TABLE movie (
+	movie_id int NOT NULL,
+	title varchar(50) NOT NULL,
+	genre varchar(50) NOT NULL,
+PRIMARY KEY (movie_id)
+);
+
+CREATE TABLE reviewer (
+	reviewer_id int NOT NULL,
+	first_name varchar(20) NOT NULL,
+	movie_id int
+);
+
+CREATE TABLE score (
+	movie_id int NOT NULL REFERENCES movie,
+	reviewer varchar(20) NOT NULL REFERENCES reviewer,
+    rating int DEFAULT NULL
+    );
+    
+/*populate movie tbl with data*/
+INSERT INTO movie (movie_id, title, genre) values (1, 'The Equalizer 3', 'Action/Adventure');
+INSERT INTO movie (movie_id, title, genre) values(2, 'Grand Turismo', 'Action/Adventure');
+INSERT INTO movie (movie_id, title, genre) values (3, 'The Retirement Plan', 'Comedy');
+INSERT INTO movie (movie_id, title, genre) values (4,'The Nun II', 'Horror');
+INSERT INTO movie (movie_id, title, genre) values (5, 'Dumb Money', 'Comedy/Drama');
+INSERT INTO movie (movie_id, title, genre) values (6,'Expend4bles', 'Action/Thriller');
+
+/*view movie tbl*/
+select * from movie m;  /*m is an alias for the movie table*/
+
+/*populate reviewer tbl with data*/
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (201, 'Craig', '1');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (201, 'Craig', '2');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (201, 'Craig', '3');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (201,'Craig', '4');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (201, 'Craig', '5');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (201,'Craig', '6');
+
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (202, 'Andrea','1');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (202, 'Andrea', '2');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (202, 'Andrea', '3');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (202, 'Andrea', '4');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (202, 'Andrea', '5');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (202,'Andrea', '6');
+
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (203, 'Darryl','1');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (203, 'Darryl', '2');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (203, 'Darryl', '3');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (203, 'Darryl', '4');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (203, 'Darryl', '5');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (203,'Darryl', '6');
+
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (204, 'Beverly','1');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (204, 'Beverly', '2');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (204, 'Beverly', '3');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (204, 'Beverly', '4');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (204, 'Beverly', '5');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (204,'Beverly', '6');
+
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (205, 'Maysie', '1');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (205, 'Maysie', '2');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (205, 'Maysie', '3');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (205, 'Maysie', '4');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (205, 'Maysie', '5');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (205, 'Maysie', '6');
+
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (206, 'Karen','1');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (206, 'Karen', '2');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (206, 'Karen', '3');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (206, 'Karen', '4');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (206, 'Karen', '5');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (206, 'Karen', '6');
+
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (207, 'Jassiem','1');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (207, 'Jassiem', '2');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (207, 'Jassiem', '3');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (207, 'Jassiem', '4');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (207, 'Jassiem', '5');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (207, 'Jassiem', '6');
+
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (208, 'Marc','1');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (208, 'Marc', '2');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (208, 'Marc', '3');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (208, 'Marc', '4');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (208, 'Marc', '5');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (208, 'Marc', '6');
+
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (209, 'Trudy', '1');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (209, 'Trudy', '2');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (209, 'Trudy', '3');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (209, 'Trudy', '4');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (209, 'Trudy', '5');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (209, 'Trudy', '6');
+
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (210, 'Kim','1');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (210, 'Kim','2');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (210, 'Kim','3');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (210, 'Kim','4');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (210, 'Kim','5');
+INSERT INTO reviewer (reviewer_id, first_name, movie_id) values (210, 'Kim','6');
+
+/*view reviewer tbl*/
+select * from reviewer r; /*r is an alias for the reviewer table*/
+
+/*populate score tbl*/
+INSERT INTO score (movie_id, reviewer, rating) values (1, 'Craig', '5'); 
+INSERT INTO score (movie_id, reviewer, rating) values (2, 'Craig', '4'); 
+INSERT INTO score (movie_id, reviewer, rating) values (3, 'Craig', '4'); 
+INSERT INTO score (movie_id, reviewer, rating) values (4, 'Craig', NULL); 
+INSERT INTO score (movie_id, reviewer, rating) values (5, 'Craig', NULL); 
+INSERT INTO score (movie_id, reviewer, rating) values (6, 'Craig', 5); 
+					
+INSERT INTO score (movie_id, reviewer, rating) values (1, 'Andrea', NULL); 
+INSERT INTO score (movie_id, reviewer, rating) values (2, 'Andrea', '4');
+INSERT INTO score (movie_id, reviewer, rating) values (3, 'Andrea', '3');
+INSERT INTO score (movie_id, reviewer, rating) values (4, 'Andrea', NULL); 
+INSERT INTO score (movie_id, reviewer, rating) values (5, 'Andrea', '5'); 
+INSERT INTO score (movie_id, reviewer, rating) values (6, 'Andrea', NULL);
+					
+INSERT INTO score (movie_id, reviewer, rating) values (1, 'Darryl', '4');
+INSERT INTO score (movie_id, reviewer, rating) values (2, 'Darryl', NULL); 
+INSERT INTO score (movie_id, reviewer, rating) values (3, 'Darryl', NULL); 
+INSERT INTO score (movie_id, reviewer, rating) values (4, 'Darryl', '4');
+INSERT INTO score (movie_id, reviewer, rating) values (5, 'Darryl', '3');
+INSERT INTO score (movie_id, reviewer, rating) values (6, 'Darryl', '5');
+				
+INSERT INTO score (movie_id, reviewer, rating) values (1, 'Beverly', '2');
+INSERT INTO score (movie_id, reviewer, rating) values (2, 'Beverly', '3');
+INSERT INTO score (movie_id, reviewer, rating) values (3, 'Beverly', NULL);
+INSERT INTO score (movie_id, reviewer, rating) values (4, 'Beverly', '1');
+INSERT INTO score (movie_id, reviewer, rating) values (5, 'Beverly', NULL);
+INSERT INTO score (movie_id, reviewer, rating) values (6, 'Beverly', '3');
+					
+INSERT INTO score (movie_id, reviewer, rating) values (1, 'Maysie', NULL); 
+INSERT INTO score (movie_id, reviewer, rating) values (2, 'Maysie', NULL); 
+INSERT INTO score (movie_id, reviewer, rating) values (3, 'Maysie', '5');
+INSERT INTO score (movie_id, reviewer, rating) values (4, 'Maysie', NULL); 
+INSERT INTO score (movie_id, reviewer, rating) values (5, 'Maysie', '4');
+INSERT INTO score (movie_id, reviewer, rating) values (6, 'Maysie', NULL); 
+			
+INSERT INTO score (movie_id, reviewer, rating) values (1, 'Karen', '5'); 
+INSERT INTO score (movie_id, reviewer, rating) values (2, 'Karen', '2'); 
+INSERT INTO score (movie_id, reviewer, rating) values (3, 'Karen', '4');
+INSERT INTO score (movie_id, reviewer, rating) values (4, 'Karen', NULL); 
+INSERT INTO score (movie_id, reviewer, rating) values (5, 'Karen', NULL);
+INSERT INTO score (movie_id, reviewer, rating) values (6, 'Karen', NULL); 
+				
+INSERT INTO score (movie_id, reviewer, rating) values (1, 'Jassiem', NULL);
+INSERT INTO score (movie_id, reviewer, rating) values (2, 'Jassiem', '4');
+INSERT INTO score (movie_id, reviewer, rating) values (3, 'Jassiem', '2');
+INSERT INTO score (movie_id, reviewer, rating) values (4, 'Jassiem', '3');
+INSERT INTO score (movie_id, reviewer, rating) values (5, 'Jassiem', NULL);
+INSERT INTO score (movie_id, reviewer, rating) values (6, 'Jassiem', NULL);
+					
+INSERT INTO score (movie_id, reviewer, rating) values (1, 'Marc', NULL);
+INSERT INTO score (movie_id, reviewer, rating) values (2, 'Marc', '3');
+INSERT INTO score (movie_id, reviewer, rating) values (3, 'Marc', NULL);
+INSERT INTO score (movie_id, reviewer, rating) values (4, 'Marc', NULL);
+INSERT INTO score (movie_id, reviewer, rating) values (5, 'Marc', '5');
+INSERT INTO score (movie_id, reviewer, rating) values (6, 'Marc', NULL); 
+			
+INSERT INTO score (movie_id, reviewer, rating) values (1, 'Trudy', '2');
+INSERT INTO score (movie_id, reviewer, rating) values (2, 'Trudy', NULL);
+INSERT INTO score (movie_id, reviewer, rating) values (3, 'Trudy', '4');
+INSERT INTO score (movie_id, reviewer, rating) values (4, 'Trudy', NULL);
+INSERT INTO score (movie_id, reviewer, rating) values (5, 'Trudy', NULL);
+INSERT INTO score (movie_id, reviewer, rating) values (6, 'Trudy', NULL); 
+			
+INSERT INTO score (movie_id, reviewer, rating) values (1, 'Kim', NULL);
+INSERT INTO score (movie_id, reviewer, rating) values (2, 'Kim', NULL);
+INSERT INTO score (movie_id, reviewer, rating) values (3, 'Kim', '2');
+INSERT INTO score (movie_id, reviewer, rating) values (4, 'Kim', '3');
+INSERT INTO score (movie_id, reviewer, rating) values (5, 'Kim', NULL);
+INSERT INTO score (movie_id, reviewer, rating) values (6, 'Kim', '4');
+
+/*view score tbl*/
+select * from score s 
+order by 2,1;          /*s (for score) is alias for rating table*/
+
+UPDATE SCORE SET RATING = '2' WHERE MOVIE_ID = '3' AND REVIEWER = 'Kim';
+SELECT 
+	m.title As 'Title',
+	m.genre As 'Genre',
+	r.first_name AS 'Reviewer',
+	s.rating As 'Rating'
+FROM movie m
+JOIN reviewer r 
+ON m.movie_id = r.movie_id
+JOIN score s
+ON r.first_name = s.reviewer
+AND r.movie_id = s.movie_id;
