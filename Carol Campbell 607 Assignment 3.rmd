@@ -1,0 +1,113 @@
+---
+title: "Data 607 Assignment 3"
+author: "Carol Campbell"
+date: "2023-09-23"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r nclude=FALSE}
+library(tidyverse)
+library(stringr)
+library(dplyr)
+
+```
+
+#1. Using the 173 majors listed in fivethirtyeight.com’s College Majors dataset [https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/], provide code that identifies the majors that contain either "DATA" or "STATISTICS"
+
+```{r}
+#use read.csv() to load data from github
+
+col_majors <- read.csv ("https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/majors-list.csv", header = TRUE, sep = ",")
+
+#filter for Data or Statistics like majors  
+col_major_mod <- col_majors %>%
+  filter(str_detect(Major, "DATA|STATISTICS"))
+
+glimpse(col_major_mod)
+
+```
+
+#2 Write code that transforms the data below:
+[1] "bell pepper"  "bilberry"     "blackberry"   "blood orange"
+[5] "blueberry"    "cantaloupe"   "chili pepper" "cloudberry"  
+[9] "elderberry"   "lime"         "lychee"       "mulberry"    
+[13] "olive"        "salal berry"
+Into a format like this:
+c("bell pepper", "bilberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper", "cloudberry", "elderberry", "lime", "lychee", "mulberry", "olive", "salal berry")
+The two exercises below are taken from R for Data Science:
+
+```{r}
+
+produce <- data.frame(c("bell pepper", "bilberry", "blackberry","blood orange","blueberry","cantalope","chili pepper","cloudberry","elderberry","lime","lychee","mulberry","olive","salal berry"))
+
+#view produce
+produce
+
+#paste produce collapsed by , into concatenate
+cat(paste0(produce), collapse=",")
+```
+
+#3 Describe, in words, what these expressions will match:
+(.)\1\1 
+ANS - "(.)\1\1" looks for any character that is followed by "\1\1"
+
+"(.)(.)\\2\\1" 
+ANS - "(.)(.)\\2\\1" looks for any two characters that are repeated in reverse, ie ace, eca
+
+(..)\1 
+ANS - (..)\1 finds any word with characters followed by  "\1"
+
+"(.).\\1.\\1" 
+ANS - "(.).\\1.\\1" searches for any character, "a" followed by any other character, followed by original character "a", followed by any other character, and the original character again
+
+"(.)(.)(.).*\\3\\2\\1" - 
+ANS - This expression searches for any three characters followed by same three characters in reverse order
+
+```{r}
+# (.)\1\1 
+my_string <- (c("abracadabra", "emme","farm\1\1", "aaa","civic", "peep", "aabbaa", "ccc" ))
+
+# find any where character is followed by "\1\1"
+x <- str_view(my_string, "(.)\1\1")   
+print(x)
+
+# find any two characters where they are repeated in reverse, ie ab, ba
+y <- str_view(my_string, "(.)(.)\\2\\1")
+print(y)
+
+# find any where word with characters followed by literal "\1"
+z <- str_view(my_string, "(..)\1")
+print(z)
+
+a <- str_view(my_string, "(.).\\1.\\1")
+print(a)
+
+b <- str_view(my_string, "(.)(.)(.).*\\3\\2\\1")
+print(b)
+
+```
+
+#4 Construct regular expressions to match words that:
+Start and end with the same character.
+Contain a repeated pair of letters (e.g. "church" contains "ch" repeated twice.)
+Contain one letter repeated in at least three places (e.g. "eleven" contains three "e"s.)
+
+```{r}
+#expression to find words that start and end with the same character
+mystring2 <- c("rubber", "Emme", "Toronto", "decide", "melee", "termite" )
+sc <- str_subset(mystring2, regex("^(.).*\\1$", ignore_case = T))
+print (sc)
+
+#expression that contain a repeated pair of letters (e.g. "church" contains "ch" repeated twice.)
+rc <- str_subset(mystring2, regex("([A-Za-z][A-Za-z]).*\\1", ignore_case = T))
+print (rc)
+
+#one letter repeated in at least three places
+tr <- str_subset(mystring2, regex("([A-Za-z]).*\\1.*\\1", ignore_case = T))
+print (tr)
+```
+
