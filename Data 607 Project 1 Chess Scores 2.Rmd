@@ -1,0 +1,125 @@
+---
+title: "Data 607 Project 1 Chess Scores2"
+author: "Carol Campbell"
+date: "2023-10-01"
+output: html_document
+---
+
+In this project, we’re given a text file with chess tournament results where the information has some structure. Our job is to create an R Markdown file that generates a .CSV file (that could for example be imported into a SQL database) with the following information for all of the players:
+
+Player’s Name, Player’s State, Total Number of Points, Player’s Pre-Rating, and Average Pre Chess Rating of Opponents
+
+For the first player, the information would be:
+
+Gary Hua, ON, 6.0, 1794, 1605
+
+1605 was calculated by using the pre-tournament opponents’ ratings of 1436, 1563, 1600, 1610, 1649, 1663, 1716, and dividing by the total number of games played.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Load libraries used
+```{r message=FALSE}
+library(tidyverse)
+library(stringr)
+library(ggplot2)
+library(readr)
+library(kableExtra)
+```
+
+##Read file from Github
+```{r}
+chess_tbl = readLines("https://raw.githubusercontent.com/carolc57/Data607-Fall23/main/chess_scores.txt")
+head(chess_tbl, 15)
+
+```
+
+##Remove rows w/ dashes
+```{r}
+#remove rows w/ dashes
+chess_tbl_mod <- str_replace_all(string = chess_tbl, pattern = "^-+$", "")
+head (chess_tbl_mod)
+```
+#Remove empty vectors
+```{r}
+chess_tbl_mod <- chess_tbl[sapply(chess_tbl_mod, nchar) > 0]
+head(chess_tbl_mod)
+```
+##Remove Header rows
+```{r}
+chess_tbl_mod <- chess_tbl_mod[-c(1:2)]  ##remove rows 1 and 2 because interfere w/ later operations
+head(chess_tbl_mod, 16)
+
+```
+
+##Since the data for one competitor is spread between two rows, I’ll need to create two separate dataframe and paste them together 
+```{r}
+chess_tbl_mod_odd = chess_tbl_mod[seq(1,128,2)]
+chess_tbl_mod_even = chess_tbl_mod[seq(2,128,2)]
+```
+
+#The combined data frame
+```{r}
+chess_tbl_mod_combined <- paste(chess_tbl_mod_odd, chess_tbl_mod_even)
+head(chess_tbl_mod_combined, 16)
+
+```
+#Tidy Player data. Use various str and regex functions to parse data
+```{r}
+chess_final <- chess_tbl_mod_combined  #change file name to preserve data prior to manipulation
+head(chess_final)
+
+
+PlayerIDTemp <- as.integer(str_extract(chess_final, "\\d+"))
+PlayerID <- subset(c(PlayerIDTemp), c(PlayerIDTemp)!="0",64)
+
+
+Name <- str_extract(string = chess_final, pattern = "\\s([[:alpha:] ]{5,})\\b\\s")  #gets name
+
+Player_Points <- str_extract(string = chess_final, pattern = "[0-9]\\.[0-9]")  #gets total points for each player
+
+State <- unlist(str_extract_all(chess_final, "\\|[[:space:]]{1,}[[A-Z]]{2} \\|"))
+State <- str_replace_all(State, pattern = "(\\|[[:space:]]{1,})|([[:space:]]{1,}\\|)", replacement = "")
+
+Player_rating <- str_extract(string = chess_final, pattern = "\\s\\d{3,4}[^\\d]")
+#remove "P" at end of rating for some players
+Player_rating <- as.integer(str_extract(Player_rating, "\\d+"))
+
+USCF_id <- str_extract(string = chess_final, pattern ="[[:digit:]]{8}") 
+
+```
+
+#Opponent Data - parse player's opponets per round
+```{r}
+Opp_Id <-str_extract_all(str_extract_all(chess_final, "\\d+\\|"), "\\d+")
+Opp_Id <-subset(c(Opp_Id), c(Opp_Id)!="0")
+head(Opp_Id)
+```
+##Function to calculate opponent average ratings
+```{r}
+x<-length(chess_tbl_mod)
+OppAvgRtg <-numeric(x/2)
+for (i in 1:(x/2)) {
+  OppAvgRtg[i] <- mean(Player_rating[as.numeric(unlist(Opp_Id[PlayerID[i]]))])
+}
+OppAvgRtg <- round((OppAvgRtg),0)
+```
+
+##chess_ratings dataframe
+```{r}
+chess_ratings <- data.frame(Name,State,Player_Points,Player_rating, OppAvgRtg)
+
+```
+
+##Write output to .csv file
+```{r}
+write.csv(chess_ratings, file = "Carols Chess Ratings.csv");
+
+```
+
+##Chess Ratings Table
+```{r}
+kable(chess_ratings) %>%
+kable_styling(bootstrap_options = "striped", full_width = F, position = "center")
+```
