@@ -1,0 +1,124 @@
+---
+title: "Data 607-Homework-5"
+author: "Carol Campbell"
+date: "2023-10-07"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Assignment – Tidying and Transforming Data
+
+We are given a .csv file containing disjointed data for two airlines - "Alaska" and "AM WEST", the five airports that they operate out of, and their respective arrival and departure delays.
+Use 'tidyr' and 'dplyr' to tidy and transform the data.  Perform an analysis to compare the arrival delays for the two airlines. 
+
+
+```{r load libraries, include=FALSE}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(kableExtra)
+```
+
+Read data from my github repository
+```{r}
+airlines <- read.csv(file = "https://raw.githubusercontent.com/carolc57/Data607-Fall23/main/Airlines.csv", header = TRUE, sep = ",", na.strings = "")
+
+#display data
+kable(airlines, format = "markdown")
+
+#rename airlines to preserve original file
+t_airlines <- airlines
+```
+
+Let the tidying begin...
+```{r}
+#rename columns 1 and 2 
+names(t_airlines)[1] <- "Airlines"
+names(t_airlines)[2] <- "Arrival_Status"
+
+#Add airline names to blank column adjacent to delayed status 
+t_airlines[2,1] <- "ALASKA"
+t_airlines[5,1] <- "AM WEST"
+
+#remove NA rows
+t_airlines <- t_airlines[!apply(is.na(t_airlines[1:7]),1,all), ]
+
+kable(t_airlines, format = "markdown")
+```
+
+
+
+Transform data from wide to long; filter for delayed flights only
+```{r}
+#transform from wide to long
+
+t_airlines2 <- t_airlines  |>
+  pivot_longer(cols = 3:7, 
+               names_to = "City",
+               values_to = "Count") |>
+  filter(Arrival_Status =="delayed")            #because we're only interested in delayed flights for our analysis
+
+kable(t_airlines2,format = "markdown")
+```
+
+Lets see the performance of these airlines by city
+```{r}
+
+flightsbycity <- t_airlines2 |> select(Airlines, City, Count) %>% 
+      group_by(Airlines, City) %>% 
+      summarise(total = sum(Count)) %>% 
+      mutate(percent           = round(total/sum(total) * 100, 2),
+             percent_formatted = paste0(round(total/sum(total) * 100, 1), "%"),
+             total_flights     = sum(total)) 
+
+flights_city <- as.data.frame(flightsbycity)
+
+kable(flights_city, format = "markdown")
+```
+
+
+Graphical presentation of airline performance by city
+```{r}
+flights_city %>% 
+ggplot( aes(x=City, y=percent, fill=Airlines)) +
+    geom_bar(stat="identity", position=position_dodge(), colour="navy") +
+    geom_text(aes(label=percent_formatted), vjust=.5, hjust=1,position= position_dodge(width=0.9),  color="navy") +
+        ggtitle("Percentage of Flights Delayed by Airline by City") +
+    xlab("Destination") + ylab("Percentage of Flights Delayed") +
+        coord_flip() 
+```
+It's interesting to see that Alaska Airlines experienced the highest delays at Seattle while AM West had a higher number of delays at Phoenix. Both airlines experienced relatively close arrival delays at Los Angeles and San Francisco.   
+
+Additional tidying to compare arrival delays between the two airlines
+```{r}
+
+stats_t_airlines2 <- t_airlines2 %>% dplyr::group_by(Airlines) %>% 
+  dplyr::summarise(total=sum(Count),
+                   max=max(Count), 
+                   min=min(Count),
+                   avg=mean(Count)
+  )
+
+stats_t_airlines2
+
+airlines_comp <- as.data.frame(stats_t_airlines2)
+
+kable(airlines_comp, format = "markdown")
+```
+From our analysis, we can conclude that Alaska Airlines has a better on-time performance than AM West Airlines over all cities.  Alaska Airlines average number of delayed flights was 100 compared to AM West Airlines' average number of delayed flights of 157.
+
+Graphical representation of Airlines Delay
+```{r}
+airlines_comp |> 
+    ggplot( aes(x=Airlines, y=total, fill=Airlines)) +
+    geom_bar(stat="identity", position=position_dodge(), colour="navy", width = 0.5) +
+    ggtitle("Flights Delayed by Airline") +
+    xlab("Airlines") + ylab("Number of Flights Delayed") 
+   
+```
+Again we can see clearly that Alaska Airlines had fewer delayed flights than AM West. 
