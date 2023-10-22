@@ -5,7 +5,7 @@
     "author_2": "Susan Dilallo",
     "author_3": "James Patterson",
     "genre": "Fiction, Romance, Contemporary",
-    "num_pgs": "320",
+    "num_pgs": 320,
     "type": "hardcover",
     "source": "goodreads.com"
   },
@@ -14,7 +14,7 @@
     "author_1": "Douglas Preston",
     "author_2": "Lincoln Child",
     "genre":  "Horror, Thriller, Mystery",
-    "num_pgs": "480",
+    "num_pgs": 480,
     "type": "paperback",
     "source": "goodreads.com"
   },
@@ -24,7 +24,7 @@
     "author_2": "Lauren Willis",
     "author_3": "Karen White",
     "genre": "Historical Fiction, Romance, Mystery",
-    "num_pgs": "624",
+    "num_pgs": 624,
     "type": "paperback",
     "source": "goodreads.com"
   }
