@@ -7,7 +7,7 @@
     "genre": "Fiction, Romance, Contemporary",
     "num_pgs": 320,
     "type": "hardcover",
-    "source": "goodreads.com"
+    "ratings": "3.99"
   },
   {  
     "title": "The Relic",
@@ -16,7 +16,7 @@
     "genre":  "Horror, Thriller, Mystery",
     "num_pgs": 480,
     "type": "paperback",
-    "source": "goodreads.com"
+    "ratings": "4.05"
   },
   {
     "title": "The Glass Ocean",
@@ -26,6 +26,6 @@
     "genre": "Historical Fiction, Romance, Mystery",
     "num_pgs": 624,
     "type": "paperback",
-    "source": "goodreads.com"
+    "ratings": "3.88"
   }
 ]  
