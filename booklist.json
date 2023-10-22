@@ -1,25 +1,31 @@
-"Title":["Things I Wish I Told My Mother"],
-"Author_1":["Susan Patterson"],
-"Author_2":["Susan Dilallo"],
-"Author_3":["James Patterson"],
-"genre": ["Fiction", "Romance", "Contemporary"]
-"num_pgs": ["320"]
-"type":["hardcover"]
-"source":["goodreads.com"]
-
-"Title":[The Relic],
-"Author_1":["Douglas Preston],
-"Author_2":["Lincoln Child"]
-"genre": ["Horror", "Thriller", "Mystery"]
-"num_pgs": ["480"]
-"type":["paperback"]
-"source":["goodreads.com"]
-
-"Title":[The Glass Ocean"],
-"Author_1":["Beatriz Williams"],
-"Author_2":["Lauren Willis"],
-"Author_3":["Karen White"]
-"genre": ["Historical Fiction", "Romance", "Mystery"]
-"num_pgs": ["624"]
-"type":["paperback"]
-"source":["goodreads.com"]
+[
+  {
+    "Title": "Things I Wish I Told My Mother",
+    "Author_1": "Susan Patterson",
+    "Author_2": "Susan Dilallo",
+    "Author_3": "James Patterson",
+    "genre": "Fiction", "Romance", "Contemporary",
+    "num_pgs": "320",
+    "type": "hardcover",
+    "source": "goodreads.com"
+  },
+  {  
+    "Title": "The Relic",
+    "Author_1": "Douglas Preston",
+    "Author_2": "Lincoln Child",
+    "genre":  "Horror", "Thriller", "Mystery",
+    "num_pgs": "480",
+    "type": "paperback",
+    "source": "goodreads.com"
+  },
+  {
+    "Title": "The Glass Ocean",
+    "Author_1": "Beatriz Williams",
+    "Author_2": "Lauren Willis",
+    "Author_3": "Karen White",
+    "genre": "Historical Fiction", "Romance", "Mystery",
+    "num_pgs": "624",
+    "type": "paperback",
+    "source": "goodreads.com"
+  }
+]  
