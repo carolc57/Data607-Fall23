@@ -1,0 +1,27 @@
+?<?xml version="1.0"?>
+<Books>
+    <Book>
+        <title>Things I Wish I Told My Mother</title>
+        <author>Susan Patterson, Susan Dilallo, James Patterson</author>
+        <genre>Fiction, Romance, Contemporary</genre>
+        <pages>320</pages>
+        <type>hardcover</type>
+        <source>goodreads.com</source>
+    </Book>
+    <Book>
+        <title>he Relic<</Title>
+        <author>Douglas Preston, Lincoln Child</author>
+        <genre>Horror, Thriller, Mystery</genre>
+        <pages>480</pages>
+        <type>softcover</type>
+        <source>goodreads.com</source>
+    </Book>
+    <Book>
+        <title>The Glass Ocean</title>
+        <author>Beatriz Williams, Lauren Willis, Karen White</author>
+        <genre>Historical Fiction, Romance, Mystery</genre>
+        <pages>624</pages>
+        <type>softcover</type>
+        <source>goodreads.com</source>
+    </Book>
+</Books>
