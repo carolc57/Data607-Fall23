@@ -6,7 +6,7 @@
         <genre>Fiction, Romance, Contemporary</genre>
         <pages>320</pages>
         <type>hardcover</type>
-        <source>goodreads.com</source>
+        <ratings>3.99</ratings>
     </Book>
     <Book>
         <title>The Relic</title>
@@ -14,7 +14,7 @@
         <genre>Horror, Thriller, Mystery</genre>
         <pages>480</pages>
         <type>softcover</type>
-        <source>goodreads.com</source>
+        <ratings>4.05</ratings>
     </Book>
     <Book>
         <title>The Glass Ocean</title>
@@ -22,6 +22,6 @@
         <genre>Historical Fiction, Romance, Mystery</genre>
         <pages>624</pages>
         <type>softcover</type>
-        <source>goodreads.com</source>
+        <ratings>3.88</ratings>
     </Book>
 </Books>
