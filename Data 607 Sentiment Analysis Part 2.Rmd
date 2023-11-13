@@ -1,0 +1,150 @@
+---
+title: "Data 607 Sentiment Analysis, Part 2"
+author: "Carol Campbell"
+date: "2023-12-11"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## **PART 2 OF 2 SENTIMENT ANALYSIS**
+
+### My corpus is from The Great Gatsby by F. Scott Fitzgerald. 
+
+## About the new corpus and lexicon
+
+In Part 1, the janeaustenr package was used to explore tidying text from her novels. For this assignment, I used the gutenbergr package (Robinson 2016) to locate the book, "The Great Gatsby" by F. Scott Fitzgerald. The gutenbergr package provides access to the public domain works from the Project Gutenberg collection. The package includes tools both for downloading books and a complete dataset of Project Gutenberg metadata that can be used to find works of interest. 
+
+# Installation and loading gutenbergr package
+
+```{r }
+
+#devtools::install_github("ropensci/gutenbergr", force = TRUE)
+library(gutenbergr)
+library(tidyverse)
+library(tidyr)
+library(ggplot2)
+library(wordcloud)
+library(reshape2)
+```
+
+## Sentiment Analysis for F. Scott Fitzgerald's "The Great Gatsby".
+
+```{r }
+
+  # Load the book, tidying the text into word token
+
+gatsby <- gutenberg_download(509)    #The Great Gatsby by F. Scott Fitzgerald
+
+tidy_gatsby <- gatsby |>
+  unnest_tokens(word,text) |>
+  anti_join(stop_words)
+
+  # Most common words in the book
+
+tidy_gatsby|>
+  count(word, sort = TRUE)
+
+  # wordcloud of most frequent words
+
+tidy_gatsby |>
+  count(word) |>
+  with(wordcloud(word, n, max.words = 75))
+```
+
+
+## Using the "louhgran" lexicon
+
+```{r}
+
+get_sentiments("loughran") |> 
+  filter(sentiment %in% c("positive", "negative")) |> 
+  count(sentiment)
+
+sentiment_positive <- get_sentiments("loughran") |> 
+  filter(sentiment == "positive")
+
+tidy_time_machine|>
+  inner_join(sentiment_positive) |>
+  count(word, sort=TRUE) |> 
+ungroup()
+
+```
+
+## Create a wordcloud of most frequent words split by loughran sentiment
+
+```{r}
+
+tidy_time_machine |>
+  inner_join(get_sentiments("loughran")) |>
+  count(word, sentiment, sort = TRUE) |>
+  acast(word ~ sentiment, value.var = "n", fill = 0) |>
+  comparison.cloud(colors = c("blue", "maroon"),
+                   max.words = 100)
+```
+
+## Find the contribution of words to different sentiments with loughran lexicon
+
+```{r }
+
+loughran_word_counts <- tidy_time_machine |>
+  inner_join(get_sentiments("loughran")) |>
+  count(word, sentiment, sort = TRUE) |>
+  ungroup()
+loughran_word_counts
+
+loughran_word_counts |>
+  group_by(sentiment) |>
+  slice_max(n, n = 5) |> 
+  ungroup() |>
+  mutate(word = reorder(word, n)) |>
+  ggplot(aes(n, word, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~sentiment, scales = "free_y") +
+  labs(x = "Contribution to sentiment",
+       y = NULL)
+```
+
+## Begin comparison of using bing lexicon to categorize words as positive and negative
+
+```{r }
+
+bing_word_counts <- tidy_time_machine |>
+  inner_join(get_sentiments("bing")) |>
+  count(word, sentiment, sort = TRUE) |>
+  ungroup()
+
+bing_word_counts
+```
+
+```{r }
+
+bing_word_counts |>
+  group_by(sentiment) |>
+  slice_max(n, n = 10) |> 
+  ungroup() |>
+  mutate(word = reorder(word, n)) |>
+  ggplot(aes(n, word, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~sentiment, scales = "free_y") +
+  labs(x = "Contribution to sentiment",
+       y = NULL)
+```
+
+## Finding joy words using nrc lexicon
+
+```{r }
+
+nrc_joy <- get_sentiments("nrc") |> 
+  filter(sentiment == "joy")
+
+tidy_time_machine |>
+  inner_join(nrc_joy) |>
+  count(word, sort = TRUE)
+```
+
+## Based on the analysis above, one can clearly see that the lexicon can have a big impact on the analysis. Thus careful consideration should be taken prior to undertaking this type of any analysis.
